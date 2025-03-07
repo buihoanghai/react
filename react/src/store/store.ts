@@ -1,6 +1,7 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
 import rootSaga from "./rootSaga";
+import rootReducer from "./rootReducer";
 
 // Dummy initial reducer (Prevents "Store does not have a valid reducer" error)
 const initialReducer = (state = {}) => state;
@@ -12,7 +13,6 @@ const sagaMiddleware = createSagaMiddleware();
 // Track injected sagas
 const injectedSagas: Record<string, Task | undefined> = {};
 
-const rootReducer = combineReducers(injectedReducers);
 
 export const store = configureStore({
 	reducer: rootReducer,
