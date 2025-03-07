@@ -1,8 +1,8 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import createSagaMiddleware from "redux-saga";
+import createSagaMiddleware, {Saga} from "redux-saga";
 import rootSaga from "./rootSaga";
 import rootReducer from "./rootReducer";
-
+import loggerMiddleware from './middlewares/loggerMiddleware';
 // Dummy initial reducer (Prevents "Store does not have a valid reducer" error)
 const initialReducer = (state = {}) => state;
 
@@ -17,12 +17,13 @@ const injectedSagas: Record<string, Task | undefined> = {};
 export const store = configureStore({
 	reducer: rootReducer,
 	middleware: (getDefaultMiddleware) =>
-		getDefaultMiddleware({ thunk: false }).concat(sagaMiddleware),
+		getDefaultMiddleware({ thunk: false }).concat(sagaMiddleware).concat(loggerMiddleware),
 });
 // Function to inject sagas dynamically
 export const injectSaga = (key: string, saga: Saga) => {
 	if (!injectedSagas[key]) {
 		injectedSagas[key] = sagaMiddleware.run(saga);
+
 	}
 };
 
